@@ -24,31 +24,58 @@ Axios.interceptors.request.use(
 
 //extend the life span of access token with 
 // the help refresh
-Axios.interceptors.request.use(
-    (response)=>{
+// Axios.interceptors.request.use(
+//     (response)=>{
+//         return response
+//     },
+//     async(error)=>{
+//         let originRequest = error.config 
+
+//         if(error.response.status === 401 && !originRequest.retry){
+//             originRequest.retry = true
+
+//             const refreshToken = localStorage.getItem("refreshToken")
+
+//             if(refreshToken){
+//                 const newAccessToken = await refreshAccessToken(refreshToken)
+
+//                 if(newAccessToken){
+//                     originRequest.headers.Authorization = `Bearer ${newAccessToken}`
+//                     return Axios(originRequest)
+//                 }
+//             }
+//         }
+        
+//         return Promise.reject(error)
+//     }
+// )
+// Correct: Response interceptor to handle 401 and refresh token
+Axios.interceptors.response.use(
+    (response) => {
         return response
     },
-    async(error)=>{
-        let originRequest = error.config 
+    async (error) => {
+        const originalRequest = error.config;
 
-        if(error.response.status === 401 && !originRequest.retry){
-            originRequest.retry = true
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
 
-            const refreshToken = localStorage.getItem("refreshToken")
+            const refreshToken = localStorage.getItem("refreshToken");
 
-            if(refreshToken){
-                const newAccessToken = await refreshAccessToken(refreshToken)
+            if (refreshToken) {
+                const newAccessToken = await refreshAccessToken(refreshToken);
 
-                if(newAccessToken){
-                    originRequest.headers.Authorization = `Bearer ${newAccessToken}`
-                    return Axios(originRequest)
+                if (newAccessToken) {
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return Axios(originalRequest);
                 }
             }
         }
-        
-        return Promise.reject(error)
+
+        return Promise.reject(error);
     }
-)
+);
+
 
 
 const refreshAccessToken = async(refreshToken)=>{
@@ -62,6 +89,9 @@ const refreshAccessToken = async(refreshToken)=>{
 
         const accessToken = response.data.data.accessToken
         localStorage.setItem('accesstoken',accessToken)
+        console.log("Refreshing token with:", refreshToken);
+console.log("New accessToken:", accessToken);
+
         return accessToken
     } catch (error) {
         console.log(error)
