@@ -17,7 +17,7 @@ import orderRouter from './route/order.route.js'
 
 const app = express()
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: "https://blinkit-clone-frontend-lemon.vercel.app" || process.env.FRONTEND_URL,
   credentials: true
 }));
 app.use(express.json())
