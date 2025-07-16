@@ -97,10 +97,17 @@ const GlobalProvider = ({children}) => {
       setNotDiscountTotalPrice(notDiscountPrice)
   },[cartItem])
 
-    const handleLogoutOut = ()=>{
-        localStorage.clear()
-        dispatch(handleAddItemCart([]))
-    }
+    // const handleLogoutOut = ()=>{
+    //     localStorage.clear()
+    //     dispatch(handleAddItemCart([]))
+    // }
+
+    const handleLogoutOut = () => {
+  localStorage.clear();
+  dispatch(handleAddItemCart([]));
+  // maybe also reset user state if needed
+};
+
 
     const fetchAddress = async()=>{
       try {
@@ -133,7 +140,7 @@ const GlobalProvider = ({children}) => {
 
     useEffect(()=>{
       fetchCartItem()
-      handleLogoutOut()
+      // handleLogoutOut()
       fetchAddress()
       fetchOrder()
     },[user])
