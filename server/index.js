@@ -17,9 +17,9 @@ import orderRouter from './route/order.route.js'
 
 const app = express()
 app.use(cors({
-    credentials : true,
-    origin : process.env.FRONTEND_URL
-}))
+  origin: 'https://blinkit-frontend-16k6.onrender.com',
+  credentials: true
+}));
 app.use(express.json())
 app.use(cookieParser())
 app.use(morgan())
