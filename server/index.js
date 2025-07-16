@@ -16,12 +16,13 @@ import addressRouter from './route/address.route.js'
 import orderRouter from './route/order.route.js'
 
 const app = express()
+app.use(cookieParser())
 app.use(cors({
   origin: "https://blinkit-clone-frontend-lemon.vercel.app" || process.env.FRONTEND_URL,
   credentials: true
 }));
 app.use(express.json())
-app.use(cookieParser())
+
 app.use(morgan())
 app.use(helmet({
     crossOriginResourcePolicy : false
