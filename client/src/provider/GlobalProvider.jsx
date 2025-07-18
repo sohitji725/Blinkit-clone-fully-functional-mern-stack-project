@@ -97,17 +97,10 @@ const GlobalProvider = ({children}) => {
       setNotDiscountTotalPrice(notDiscountPrice)
   },[cartItem])
 
-    // const handleLogoutOut = ()=>{
-    //     localStorage.clear()
-    //     dispatch(handleAddItemCart([]))
-    // }
-
-    const handleLogoutOut = () => {
-  localStorage.clear();
-  dispatch(handleAddItemCart([]));
-  // maybe also reset user state if needed
-};
-
+    const handleLogoutOut = ()=>{
+        localStorage.clear()
+        dispatch(handleAddItemCart([]))
+    }
 
     const fetchAddress = async()=>{
       try {
@@ -138,14 +131,12 @@ const GlobalProvider = ({children}) => {
       }
     }
 
-   useEffect(() => {
-  if (user?._id) {
-    fetchCartItem();
-    fetchAddress();
-    fetchOrder();
-  }
-}, [user]);
-
+    useEffect(()=>{
+      fetchCartItem()
+      handleLogoutOut()
+      fetchAddress()
+      fetchOrder()
+    },[user])
     
     return(
         <GlobalContext.Provider value={{

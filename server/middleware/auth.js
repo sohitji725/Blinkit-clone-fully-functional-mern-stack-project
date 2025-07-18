@@ -1,64 +1,36 @@
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'
 
-// const auth = async (request, response, next) => {
-//   try {
-// const token = req.headers.authorization?.split(" ")[1] 
-//            || req.cookies?.accessToken // optional fallback
+const auth = async(request,response,next)=>{
+    try {
+        const token = request.cookies.accessToken || request?.headers?.authorization?.split(" ")[1]
+       
+        if(!token){
+            return response.status(401).json({
+                message : "Provide token"
+            })
+        }
 
-//     if (!token) {
-//       return response.status(401).json({ message: 'No token provided' });
-//     }
+        const decode = await jwt.verify(token,process.env.SECRET_KEY_ACCESS_TOKEN)
 
-//     jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN
-// , (err, decoded) => {
-//       if (err) {
-//         return response.status(401).json({ message: 'Invalid token', success: false });
-//       }
+        if(!decode){
+            return response.status(401).json({
+                message : "unauthorized access",
+                error : true,
+                success : false
+            })
+        }
 
-//       request.userId = decoded.id;
-//       console.log("Authenticated userId:", decoded.id);
-//       next();
-//     });
-//   } catch (error) {
-//     return response.status(500).json({
-//       message: 'Authentication failed',
-//       error: error.message || error,
-//       success: false,
-//     });
-//   }
-// };
+        request.userId = decode.id
 
-// export default auth;
-import jwt from 'jsonwebtoken';
+        next()
 
-const auth = async (req, res, next) => {
-  try {
-    const headerToken = req.headers.authorization?.split(" ")[1];
-    const cookieToken = req.cookies?.accessToken;
-
-    const token = headerToken || cookieToken;
-
-    if (!token) {
-      return res.status(401).json({ message: "No token provided" });
+    } catch (error) {
+        return response.status(500).json({
+            message : "You have not login",///error.message || error,
+            error : true,
+            success : false
+        })
     }
+}
 
-    jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: "Invalid token", success: false });
-      }
-
-      req.userId = decoded.id;
-      console.log("✅ Authenticated userId:", decoded.id);
-      next();
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Authentication failed",
-      error: error.message || error,
-      success: false,
-    });
-  }
-};
-
-export default auth;
-
+export default auth
