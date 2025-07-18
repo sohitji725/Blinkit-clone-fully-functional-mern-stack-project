@@ -28,6 +28,9 @@ app.use(helmet({
 }))
 
 const PORT = 8080 || process.env.PORT 
+app.get('/ping', (req, res) => {
+  res.send("pong");
+});
 
 app.get("/",(request,response)=>{
     ///server to client
