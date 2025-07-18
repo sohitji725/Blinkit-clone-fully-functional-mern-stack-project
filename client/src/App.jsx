@@ -18,6 +18,12 @@ import CartMobileLink from './components/CartMobile';
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
+  useEffect(() => {
+  fetch("https://binkeyit-server.onrender.com/ping")
+    .then(res => console.log("✅ Backend woke up"))
+    .catch(err => console.error("❌ Backend wakeup failed"));
+}, []);
+
   
 
   const fetchUser = async()=>{
