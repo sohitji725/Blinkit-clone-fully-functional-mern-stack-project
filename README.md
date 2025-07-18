@@ -3,7 +3,7 @@
 # 🛒 BinkeyIt - Blinkit Clone (MERN Stack)
 
 A full-stack eCommerce grocery delivery web application inspired by [Blinkit](https://www.blinkit.com/). Built using the MERN stack (MongoDB, Express, React, Node.js) with complete authentication, product management, cart, and payment features.
-
+open these both links in seperate browser tab to see the live project
 Frontend Demo: https://blinkit-frontend-client.onrender.com
 Backend API:  https://binkeyit-server.onrender.com
 
